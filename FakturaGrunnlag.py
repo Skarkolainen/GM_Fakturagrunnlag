@@ -1,10 +1,12 @@
+#Simen Skarkerud, Glommen Mjøsen Skog 2021
+
 #coding=utf-8
 
 import arcpy
 import os
 import xlwt
 import json
-
+import datetime
 # ta inn Eiendom og bestand, direktekobling, ikke bruk lag i mxd ?
 
 # ta inn verktøyparametere
@@ -15,19 +17,21 @@ runAsTool = True
 if runAsTool == True:
     gdb = arcpy.GetParameterAsText(0)
     hovednummere = arcpy.GetParameterAsText(1)
-    ispeddArealGrense = int(arcpy.GetParameterAsText(2))
-    maxAndelIspedd = int(arcpy.GetParameterAsText(3))
-    utfil = arcpy.GetParameterAsText(4)
-    prisListeFil = ""
+    prisListeFil = arcpy.GetParameterAsText(2) #"C:\Utvikling\dev-python\FakturaGrunnlag\Prisliste.json"
+    ispeddArealGrense = int(arcpy.GetParameterAsText(3))
+    maxAndelIspedd = int(arcpy.GetParameterAsText(4))
+    utfil = arcpy.GetParameterAsText(5)
 
-    #osv feks kun Plantype over null, utfil
+
+    #osv feks kun prosjektnr, Plantype over null, utfil
 else:
     gdb = r"C:\Utvikling\dev-python\testdata\Testdata2021.gdb"
     hovednummere = '01180006600010000,01180006600020000,01180006700040000,01180006700030000,01180006700050000'
     #hovednummere = "01180000500010000"
     ispeddArealGrense = 10
     maxAndelIspedd = 10
-    prisListeFil = r"C:\Utvikling\dev-python\FakturaGrunnlag\Prisliste.json"
+    prisListeFil = "C:\Utvikling\dev-python\FakturaGrunnlag\Prisliste.json"
+    utfil = r"C:\Utvikling\dev-python\testdata"
 
 #initier eiendomslag
 arcpy.env.workspace = gdb
@@ -56,10 +60,10 @@ print_debug = True
 #Hent prisliste
 
 with open(prisListeFil) as json_file:
-    prisListe = json.load(prisListeFil)
+    prisListe = json.load(json_file)
 
 def hentPris(planType, takstAreal):
-    prisPlanType = prisListe[planType][u"Pris_Daa"] #hent prisliste for gitt plantype
+    prisPlanType = prisListe[str(planType)][u"Pris_Daa"] #hent prisliste for gitt plantype
 
     prisPlanTypeFloatTuple= [(float(k),v) for k,v in prisPlanType.items()] #Gjør prislisten om til tuple med floatverdier
 
@@ -170,7 +174,13 @@ class Eiendom:
         #Teller antall eiendomsobjekter
         Eiendom.antallEiendommer += 1
 
+        #Hent priser
 
+        plantypePris = hentPris(str(self.plantype), self.sumTakstAreal)
+        self.plantypeDomene = plantypePris[0]
+        self.prisDaa = plantypePris[1]
+
+        self.sumArealPris = self.sumTakstAreal * self.prisDaa
 
     def arealerToString(self):
         return str(self.hovednr) + "\n sum Bestandsareal: " + str(self.sumBestandsAreal) +  "\n sum Prod areal: " + str(self.sumProdAreal) +\
@@ -178,8 +188,8 @@ class Eiendom:
                str(self.sumTakstAreal) + "\n totaltArealEiendom: " + str(self.totaltArealEiendom)
 
     def toExcelRow(self):
-        return [self.hovednr, self.fornavn, self.etternavn, self.adresse, self.postnr, self.poststed, self.plantype,
-                self.sumBestandsAreal, self.sumProdAreal, self.sumIspeddAreal, self.sumTakstAreal]
+        return [self.hovednr, self.fornavn, self.etternavn, self.adresse, self.postnr, self.poststed, self.plantypeDomene,
+                self.sumBestandsAreal, self.sumProdAreal, self.sumIspeddAreal, self.sumTakstAreal, self.prisDaa, self.sumArealPris]
 
 
 
@@ -209,7 +219,7 @@ ark = excelfil.add_sheet("Ark 1")
 
 #liste = [["A" ,"B" ,"C","D"] ,["1" ,"2" ,"3","4"] ,["A" ,"B" ,"C","D"]]
 overskrifter = ["HOVEDNUMMER","Fornavn","Etternavn","Adresse","Postnummer","Poststed","Plantype","Totalt Areal",
-                "Produktivt Areal","Uprod.Ispedd Areal", "Takstareal"]
+                "Produktivt Areal","Uprod.Ispedd Areal", "Takstareal","Pris/Daa", "Sum Arealavh. pris"]
 
 for i in range(len(overskrifter)):
     ark.write(0,i, overskrifter[i])
@@ -221,9 +231,12 @@ for i in range(len(alleExcelLinjer)):
         #print liste[i][j]
         ark.write(i+1,j, alleExcelLinjer[i][j])
 
+nu = datetime.datetime.now()
 
+filnavn = u"Fakturagrunnlag_" + nu.strftime('%d-%m-%y_%H_%M') + '.xls'
 
-excelfil.save(utfil +"/tester.xls")
+excelfil.save(os.path.join(utfil, filnavn))
+print (utfil + filnavn)
 
 
 

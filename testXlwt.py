@@ -2,6 +2,7 @@
 
 import xlwt
 import json
+import datetime
 
 excelfil = xlwt.Workbook()
 ark = excelfil.add_sheet("Ark 1")
@@ -44,4 +45,8 @@ def hentPris(planType, takstAreal):
 
     return (prisListe[planType][u"Domene"], pris)
 
-print hentPris("1", 1000.01)
+nu = datetime.datetime.now()
+
+filnavn = u"Fakturagrunnlag_" + nu.strftime('%d-%m-%y_%H:%M') + '.xls'
+
+print filnavn

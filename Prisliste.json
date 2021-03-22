@@ -10,119 +10,119 @@
   "2": {
     "Domene": "Enkel Skogbruksplan",
     "Pris_Daa": {
-      "<100": 10.20,
-      "<=1000": 19.90,
-      ">1000": 8.60
+      "100": 10.20,
+      "1000": 19.90,
+      "-1": 8.60
     }
   },
   "3": {
     "Domene": "Ressursoversikt",
     "Pris_Daa": {
-      "<100": 10.20,
-      "<=1000": 9.90,
-      ">1000": 8.60
+      "100": 10.20,
+      "1000": 9.90,
+      "-1": 8.60
     }
   },
   "4": {
     "Domene": "Skogoversikt",
     "Pris_Daa": {
-      "<100": 0,
-      "<=1000": 0,
-      ">1000": 0
+      "100": 10.20,
+      "1000": 19.90,
+      "-1": 8.60
     }
   },
   "5": {
     "Domene": "Skogbruksplan med relaskoptakst",
     "Pris_Daa": {
-      "<100": 0,
-      "<=1000": 0,
-      ">1000": 0
+      "100": 10.20,
+      "1000": 19.90,
+      "-1": 8.60
     }
   },
   "6": {
     "Domene": "Skogbruksplan med hogstforslag",
     "Pris_Daa": {
-      "<100": 0,
-      "<=1000": 0,
-      ">1000": 0
+      "100": 10.20,
+      "1000": 19.90,
+      "-1": 8.60
     }
   },
   "7": {
     "Domene": "Skogbruksplan med ungskogforslag",
     "Pris_Daa": {
-      "<100": 0,
-      "<=1000": 0,
-      ">1000": 0
+      "100": 10.20,
+      "1000": 19.90,
+      "-1": 8.60
     }
   },
   "8": {
     "Domene": "Skogbruksplan med relaskoptakst og hogstforslag",
     "Pris_Daa": {
-      "<100": 0,
-      "<=1000": 0,
-      ">1000": 0
+      "100": 10.20,
+      "1000": 19.90,
+      "-1": 8.60
     }
   },
   "9": {
     "Domene": "Kun webtilgang",
     "Pris_Daa": {
-      "<100": 0,
-      "<=1000": 0,
-      ">1000": 0
+      "100": 10.20,
+      "1000": 19.90,
+      "-1": 8.60
     }
   },
   "10": {
     "Domene": "Webtilgang med tillegg",
     "Pris_Daa": {
-      "<100": 0,
-      "<=1000": 0,
-      ">1000": 0
+      "100": 10.20,
+      "1000": 19.90,
+      "-1": 8.60
     }
   },
   "11": {
     "Domene": "Miljøregistrering",
     "Pris_Daa": {
-      "<100": 0,
-      "<=1000": 0,
-      ">1000": 0
+      "-1": 1
     }
   },
   "0": {
     "Domene": "Ukjent skogbruksplan",
     "Pris_Daa": {
-      "<100": 0,
-      "<=1000": 0,
-      ">1000": 0
+      "100": 10.20,
+      "1000": 19.90,
+      "-1": 8.60
     }
   },
   "12": {
     "Domene": "Ressursoversikt med ajourførte data i Pan",
     "Pris_Daa": {
-      "<100": 0,
-      "<=1000": 0,
-      ">1000": 0
+      "100": 10.20,
+      "1000": 19.90,
+      "-1": 8.60
     }
   },
   "13": {
     "Domene": "Skogbruksplan med genererte behandlingsforslag",
     "Pris_Daa": {
-      "<100": 0,
-      "<=1000": 0,
-      ">1000": 0
+      "100": 10.20,
+      "1000": 19.90,
+      "-1": 8.60
     }
   },
   "14": {
     "Domene": "Skogbruksplan med genererte behandlingsforslag og markbefaring i hogstklasse 1 og 2",
     "Pris_Daa": {
-      "<100": 13.20,
-      "<=1000": 12.90,
-      ">1000": 11.60
+      "100": 13.20,
+      "1000": 12.90,
+      "-1": 11.60
     }
   },
   "15": {
     "Domene": "Skogbruksplan med markbefaring i hkl 1,2 og 3",
     "Pris_Daa": {
-      "0": 1
+      "100": 10.20,
+      "1000": 19.90,
+      "-1": 8.60
     }
   },
   "20": {
