@@ -82,13 +82,13 @@ def hentPris(planType, takstAreal):
 
 
 def eiendomsAreal(hovednr):
-    felter = ['AREAL_DAA', 'Shape_Area']
+    felter = ['AREAL_DAA']
     uttrykk = "HOVEDNR = '" + str(hovednr) + "'"
 
     with arcpy.da.SearchCursor(EiendomFC, felter, where_clause=uttrykk) as cursor:
         sumAreal = 0
         for row in cursor:
-            sumAreal += row[1]
+            sumAreal += row[0]
 
         return sumAreal / 1000
 
