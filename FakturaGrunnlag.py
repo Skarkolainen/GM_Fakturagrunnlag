@@ -3,6 +3,7 @@
 import arcpy
 import os
 import xlwt
+import json
 
 # ta inn Eiendom og bestand, direktekobling, ikke bruk lag i mxd ?
 
@@ -17,6 +18,7 @@ if runAsTool == True:
     ispeddArealGrense = int(arcpy.GetParameterAsText(2))
     maxAndelIspedd = int(arcpy.GetParameterAsText(3))
     utfil = arcpy.GetParameterAsText(4)
+    prisListeFil = ""
 
     #osv feks kun Plantype over null, utfil
 else:
@@ -25,6 +27,7 @@ else:
     #hovednummere = "01180000500010000"
     ispeddArealGrense = 10
     maxAndelIspedd = 10
+    prisListeFil = r"C:\Utvikling\dev-python\FakturaGrunnlag\Prisliste.json"
 
 #initier eiendomslag
 arcpy.env.workspace = gdb
@@ -49,6 +52,31 @@ print_debug = True
     #har egne funksjoner for å hente info fra bestand, eiendom og skogeier
     #Har egen toString metode, som skriver linje som passer inn til excel-arket fakturagrunnlag.
     #TODO kontrollmetoder som sjekker, feks at bestandsarealet er likt eiendomsarealet, kan avdekke topologi-feil.
+
+#Hent prisliste
+
+with open(prisListeFil) as json_file:
+    prisListe = json.load(prisListeFil)
+
+def hentPris(planType, takstAreal):
+    prisPlanType = prisListe[planType][u"Pris_Daa"] #hent prisliste for gitt plantype
+
+    prisPlanTypeFloatTuple= [(float(k),v) for k,v in prisPlanType.items()] #Gjør prislisten om til tuple med floatverdier
+
+    prisPlanTypeFloatTuple.sort(key=lambda tup: tup[1]) # Sorterer prisliste stigende
+
+    pris = None
+    for i in prisPlanTypeFloatTuple: #Itererer prisliste, velger den første som takstareal er mindre enn.
+        if takstAreal <= i[0]:
+            pris =  i[1]
+            break
+
+    if pris == None: #Hvis arealet ikke er mindre enn noen, velg første som er pris for større enn..
+        pris = prisPlanTypeFloatTuple[0][1]
+
+    return (prisListe[planType][u"Domene"], pris)
+
+
 def eiendomsAreal(hovednr):
     felter = ['AREAL_DAA', 'Shape_Area']
     uttrykk = "HOVEDNR = '" + str(hovednr) + "'"
@@ -92,7 +120,6 @@ def bestandsAreal(hovednr):
         sumTakstAreal = sumProdAreal + sumIspeddAreal
 
         return (sumBestandsAreal,sumProdAreal, sumUprodAreal, sumIspeddAreal,sumTakstAreal)
-
 
 def skogeierVariabler(hovednr):
     felter = ['FORNAVN','ETTERNAVN','ADRESSE','POSTNR','POSTSTED','PLANTYPE']
